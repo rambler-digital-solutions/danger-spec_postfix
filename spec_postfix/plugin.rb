@@ -30,9 +30,9 @@ module Danger
 
     def lint
       changed_files.select { |f| f.match?(%r{^spec/.*rb$}) }
-        .reject { |f| f.end_with?('_spec.rb') }
-        .reject { |f| DangerSpecPostfix.configuration.exceptions.any? { |e| f.start_with?(e) } }
-        .each   { |f| warn(warning_generator(f)) }
+                   .reject { |f| f.end_with?('_spec.rb') }
+                   .reject { |f| DangerSpecPostfix.configuration.exceptions.any? { |e| f.start_with?(e) } }
+                   .each   { |f| warn(warning_generator(f)) }
     end
 
     private
@@ -46,9 +46,13 @@ module Danger
     end
   end
 
-  class DangerSpecPostfix::Configuration
-    include ::ActiveSupport::Configurable
+  class DangerSpecPostfix
+    class Configuration
+      include ::ActiveSupport::Configurable
 
-    config_accessor(:exceptions) { ['spec/shared_examples/', 'spec/factories/', 'spec/support/', 'spec/rails_helper.rb', 'spec/spec_helper.rb'] }
+      config_accessor(:exceptions) do
+        ['spec/shared_examples/', 'spec/factories/', 'spec/support/', 'spec/rails_helper.rb', 'spec/spec_helper.rb']
+      end
+    end
   end
 end
