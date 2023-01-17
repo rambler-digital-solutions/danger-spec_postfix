@@ -4,7 +4,7 @@ module Danger
   # Lints the test files. Will fail if any has no '_spec' postfix.
   # Generates a `string` with warning.
   #
-  # @param   [String] files
+  # @param   [Array<String>] files
   #          A globbed string which should return the files that you want to lint, defaults to nil.
   #          if nil, modified and added files from the diff will be used.
   # @return  [void]

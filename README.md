@@ -12,15 +12,9 @@ Danger plugin to validate sub README mention in main README file
 
     spec_postfix.lint
 
-## Configuration
+    You can also pass `exceptions` param in order to skip irrelevant files or directories:
 
-    By default some of files and folders are out of scope. You can configure your own custom list of exceptions.
-
-    #config/initializers/danger/danger_spec_postfix.rb
-
-    Danger::DangerSpecPostfix.configure do |config|
-      config.exceptions = ['rails_helper.rb', 'rails_helper.rb']
-    end
+    spec_postfix.lint(exceptions: ['rails_helper.rb', 'rails_helper.rb', 'spec/factories/', 'spec/support/'])
 
 ## Development
 
