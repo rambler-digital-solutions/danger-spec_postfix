@@ -2,37 +2,39 @@
 
 require 'active_support/configurable'
 
+# Adding plugin
 module Danger
-  # Check that all test files in spec/ folder have `_spec` postfix.
-  # Results are passed out as a string with warning.
+  def self.configuration
+    @configuration ||= Configuration.new
+  end
+
+  def self.configure
+    yield configuration
+  end
+
+  # Adding opportunity to maintain exceptions list for plugin.
+  class Configuration
+    include ::ActiveSupport::Configurable
+
+    config_accessor(:spec_postfix_exceptions) do
+      ['spec/shared_examples/', 'spec/factories/', 'spec/support/', 'spec/rails_helper.rb', 'spec/spec_helper.rb']
+    end
+  end
+
+  # Lints the test files. Will fail if any has no '_spec' postfix.
+  # Generates a `string` with warning.
   #
-  # @example Running linter
-  #
-  #          # Runs a linter
-  #          spec_postfix.lint
+  # @param   [String] files
+  #          A globbed string which should return the files that you want to lint, defaults to nil.
+  #          if nil, modified and added files from the diff will be used.
+  # @return  [void]
   #
   class DangerSpecPostfix < Plugin
-    # Lints the test files. Will fail if any has no '_spec' postfix.
-    # Generates a `string` with warning.
-    #
-    # @param   [String] files
-    #          A globbed string which should return the files that you want to lint, defaults to nil.
-    #          if nil, modified and added files from the diff will be used.
-    # @return  [void]
-    #
-    def self.configuration
-      @configuration ||= Configuration.new
-    end
-
-    def self.configure
-      yield configuration
-    end
-
     def lint
       changed_files.select { |f| f.match?(%r{^spec/.*rb$}) }
-        .reject { |f| f.end_with?('_spec.rb') }
-        .reject { |f| DangerSpecPostfix.configuration.exceptions.any? { |e| f.start_with?(e) } }
-        .each   { |f| warn(warning_generator(f)) }
+                   .reject { |f| f.end_with?('_spec.rb') }
+                   .reject { |f| Danger.configuration.spec_postfix_exceptions.any? { |e| f.start_with?(e) } }
+                   .each   { |f| warn(warning_generator(f)) }
     end
 
     private
@@ -44,11 +46,5 @@ module Danger
     def warning_generator(file)
       "Tests should have `_spec` postfix: #{file}"
     end
-  end
-
-  class DangerSpecPostfix::Configuration
-    include ::ActiveSupport::Configurable
-
-    config_accessor(:exceptions) { ['spec/shared_examples/', 'spec/factories/', 'spec/support/', 'spec/rails_helper.rb', 'spec/spec_helper.rb'] }
   end
 end

@@ -37,8 +37,8 @@ module Danger
 
       context 'when is irrelevant (exceptions)' do
         before do
-          described_class.configure do |config|
-            config.exceptions = 'not_tests/'
+          Danger.configure do |config|
+            config.spec_postfix_exceptions = 'not_tests/'
           end
         end
 
