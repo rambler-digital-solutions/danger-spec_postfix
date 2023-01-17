@@ -1,20 +1,31 @@
-# danger-readme_docs
+# danger-spec_postfix
 
-Danger plugin to validate sub README mention in main README file
+Danger plugin to validate files (or directories) naming.
 
 ## Installation
 
     $ gem install danger-spec_postfix
 
-## Usage
+## Example of usage
 
-    Add this to your Dangerfile:
+    Add to your Dangerfile:
 
-    spec_postfix.lint
+    options = {
+      message: 'Tests should have `_spec` postfix',
+      scope: %r{spec/},
+      match: %r{_spec.rb$}
+    }
+    spec_postfix.lint(options)
 
     You can also pass `exceptions` param in order to skip irrelevant files or directories:
 
-    spec_postfix.lint(exceptions: ['rails_helper.rb', 'rails_helper.rb', 'spec/factories/', 'spec/support/'])
+    options = {
+      message: 'Tests should have `_spec` postfix',
+      scope: %r{spec/},
+      match: %r{_spec.rb$}
+      exception: Regexp.union(%r{rails_helper.rb}, %r{rails_helper.rb}, %{spec/factories/}, %r{spec/support/})
+    }
+    spec_postfix.lint(options)
 
 ## Development
 

@@ -9,7 +9,21 @@ module Danger
     end
 
     describe 'with Dangerfile' do
-      let(:file_path) { nil }
+      subject do
+        @spec_postfix.lint(options)
+        @spec_postfix.status_report[:warnings]
+      end
+
+      let(:message) { 'Tests should have `_spec` postfix' }
+      let(:scope) { %r{spec/} }
+      let(:match) { %r{_spec.rb$} }
+      let(:options) do
+        {
+          message: message,
+          scope: scope,
+          match: match
+        }
+      end
 
       before do
         @spec_postfix = testing_dangerfile.spec_postfix
@@ -18,32 +32,31 @@ module Danger
         allow(@spec_postfix.git).to receive(:modified_files).and_return([file_path])
       end
 
-      subject do
-        @spec_postfix.lint
-        @spec_postfix.status_report[:warnings]
-      end
-
-      context 'with _spec' do
-        let(:file_path) { 'spec/models/my_test_spec.rb' }
+      context 'when match' do
+        let(:file_path) { 'spec/some_test_spec.rb' }
 
         it { is_expected.to be_empty }
       end
 
-      context 'with no _spec' do
-        let(:file_path) { 'spec/models/my_test.rb' }
+      context 'when not match' do
+        let(:file_path) { 'spec/some_test.rb' }
 
-        it { is_expected.to eq(["Tests should have `_spec` postfix: #{file_path}"]) }
-      end
+        it { is_expected.to eq(["#{message}: #{file_path}"]) }
 
-      context 'when is irrelevant (exceptions)' do
-        subject do
-          @spec_postfix.lint(exceptions: ['not_tests/'])
-          @spec_postfix.status_report[:warnings]
+        context 'with exception' do
+          let(:options) do
+            {
+              message: message,
+              scope: scope,
+              match: match,
+              exception: exception
+            }
+          end
+          let(:file_path) { 'spec/spec_helper.rb' }
+          let(:exception) { Regexp.union(%r{spec/factories}, %r{spec_helper.rb}) }
+
+          it { is_expected.to be_empty }
         end
-
-        let(:file_path) { 'not_tests/factory.rb' }
-
-        it { is_expected.to be_empty }
       end
     end
   end
