@@ -36,10 +36,9 @@ module Danger
       end
 
       context 'when is irrelevant (exceptions)' do
-        before do
-          Danger.configure do |config|
-            config.spec_postfix_exceptions = 'not_tests/'
-          end
+        subject do
+          @spec_postfix.lint(exceptions: ['not_tests/'])
+          @spec_postfix.status_report[:warnings]
         end
 
         let(:file_path) { 'not_tests/factory.rb' }

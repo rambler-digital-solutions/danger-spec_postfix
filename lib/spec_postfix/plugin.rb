@@ -1,26 +1,6 @@
 # frozen_string_literal: true
 
-require 'active_support/configurable'
-
-# Adding plugin
 module Danger
-  def self.configuration
-    @configuration ||= Configuration.new
-  end
-
-  def self.configure
-    yield configuration
-  end
-
-  # Adding opportunity to maintain exceptions list for plugin.
-  class Configuration
-    include ::ActiveSupport::Configurable
-
-    config_accessor(:spec_postfix_exceptions) do
-      ['spec/shared_examples/', 'spec/factories/', 'spec/support/', 'spec/rails_helper.rb', 'spec/spec_helper.rb']
-    end
-  end
-
   # Lints the test files. Will fail if any has no '_spec' postfix.
   # Generates a `string` with warning.
   #
@@ -30,10 +10,10 @@ module Danger
   # @return  [void]
   #
   class DangerSpecPostfix < Plugin
-    def lint
+    def lint(exceptions: [])
       changed_files.select { |f| f.match?(%r{^spec/.*rb$}) }
                    .reject { |f| f.end_with?('_spec.rb') }
-                   .reject { |f| Danger.configuration.spec_postfix_exceptions.any? { |e| f.start_with?(e) } }
+                   .reject { |f| exceptions.any? { |e| f.start_with?(e) } }
                    .each   { |f| warn(warning_generator(f)) }
     end
 
