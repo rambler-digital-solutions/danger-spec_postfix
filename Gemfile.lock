@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    danger-spec_postfix (0.0.51)
+    danger-spec_postfix (0.0.6)
       danger-plugin-api (~> 1.0)
 
 GEM
