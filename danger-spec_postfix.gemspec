@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.version       = SpecPostfix::VERSION
   spec.authors       = ['Igor Udalov']
   spec.email         = ['i.udalov@rambler-co.ru']
-  spec.summary       = "Danger plugin to validate '_spec' postfix in tests"
+  spec.summary       = "Danger plugin to validate files (or directories) naming."
   spec.homepage      = 'https://github.com/rambler-digital-solutions/danger-spec_postfix'
   spec.license       = 'MIT'
 

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Danger
-  # Lints the test files. Will fail if any has no '_spec' postfix.
+  # Lints files (or directories) naming.
   # Generates a `string` with warning.
   #
   # @param   [Array<String>] files
@@ -10,7 +10,7 @@ module Danger
   # @param   scope [Regexp] Scope of check
   # @param   match [Regexp] Pattern to match
   # @param   message [String] Warn message
-  # @param   exception [Regexp] Not required. In case you get some directories or files out of scope.
+  # @param   exception [Regexp] Not required. In case you want to get some directories or files out of scope.
   # @return  [void]
   #
   class DangerSpecPostfix < Plugin
