@@ -15,12 +15,12 @@ module Danger
       end
 
       let(:message) { 'Tests should have `_spec` postfix' }
-      let(:scope) { %r{spec/} }
+      let(:include_path) { %r{spec/} }
       let(:match) { %r{_spec.rb$} }
       let(:options) do
         {
           message: message,
-          scope: scope,
+          include_path: include_path,
           match: match
         }
       end
@@ -47,13 +47,13 @@ module Danger
           let(:options) do
             {
               message: message,
-              scope: scope,
+              include_path: include_path,
               match: match,
-              exception: exception
+              exclude_path: exclude_path
             }
           end
           let(:file_path) { 'spec/spec_helper.rb' }
-          let(:exception) { Regexp.union(%r{spec/factories}, %r{spec_helper.rb}) }
+          let(:exclude_path) { Regexp.union(%r{spec/factories}, %r{spec_helper.rb}) }
 
           it { is_expected.to be_empty }
         end
