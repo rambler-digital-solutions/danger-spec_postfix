@@ -15,20 +15,20 @@ Danger plugin to validate files (or directories) naming.
     ```
     options = {
       message: 'Tests should have `_spec` postfix',
-      scope: %r{spec/},
+      include_path: %r{spec/},
       match: %r{_spec.rb$}
     }
     spec_postfix.lint(options)
     ```
 
-    You can also pass `exceptions` param in order to skip irrelevant files or directories:
+    You can also pass `exclude_path` param in order to skip irrelevant files or directories:
 
     ```
     options = {
       message: 'Tests should have `_spec` postfix',
-      scope: %r{spec/},
+      include_path: %r{spec/},
       match: %r{_spec.rb$}
-      exception: Regexp.union(%r{rails_helper.rb}, %r{rails_helper.rb}, %{spec/factories/}, %r{spec/support/})
+      exclude_path: Regexp.union(%r{rails_helper.rb}, %r{rails_helper.rb}, %{spec/factories/}, %r{spec/support/})
     }
     spec_postfix.lint(options)
     ```
